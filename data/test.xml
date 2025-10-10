@@ -1,0 +1,20 @@
+<students>
+  <student>
+    <id>1</id>
+    <name>Ana</name>
+    <subject>Math</subject>
+    <grade>90</grade>
+  </student>
+  <student>
+    <id>2</id>
+    <name>Ben</name>
+    <subject>Science</subject>
+    <grade>85</grade>
+  </student>
+  <student>
+    <id>3</id>
+    <name>Cara</name>
+    <subject>English</subject>
+    <grade>88</grade>
+  </student>
+</students>
