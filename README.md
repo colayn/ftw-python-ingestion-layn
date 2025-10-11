@@ -143,4 +143,190 @@ mkdir -p data output
 
 Place your inputs (like `chinook.db` or sample CSVs) in the `data/` folder.
 
- 
+# 🧠 Data Ingestion in Python — Mini Lecture and Guide
+
+This repository demonstrates **five fundamental ways to bring data into Python**, from simple flat files to dynamic web scraping.
+Each script introduces a new data ingestion concept and a set of important libraries for data engineers and analysts.
+
+---
+
+## 🗂️ 01 — Flat Files (`01-flat-files.py`)
+
+### 💡 Concept
+
+Reading **structured and semi-structured files** (CSV, TSV, JSON, XML, YAML, HTML) into **pandas DataFrames** — the foundation of most data work.
+
+### 🧰 Key Libraries
+
+* **pandas** – handles tabular data, file I/O, and transformations.
+* **yaml** – parses YAML configuration-style data.
+
+### 🧠 Core Idea
+
+> Data often comes in different formats — pandas can unify them all into a consistent DataFrame structure.
+
+### 🏃 Example
+
+```python
+pd.read_csv("data/test.csv")
+pd.read_json("data/test.json")
+pd.read_xml("data/test.xml")
+pd.read_html("data/test.html")[0]
+```
+
+---
+
+## 🏦 02 — Database Access (`02-database.py`)
+
+### 💡 Concept
+
+Querying a **relational database** directly from Python, using **Ibis** to abstract SQL.
+
+### 🧰 Key Libraries
+
+* **ibis** – a high-level data query framework that works across multiple backends (SQLite, Postgres, DuckDB, etc.).
+* **pandas** – to collect query results and export to CSV.
+
+### 🧠 Core Idea
+
+> Instead of writing SQL manually, you can express queries with Python syntax — portable across databases.
+
+### 🏃 Example
+
+```python
+con = ibis.sqlite.connect("data/chinook.db")
+invoices = con.table("invoices")
+customers = con.table("customers")
+joined = invoices.join(customers, "CustomerId")
+result = joined.group_by("Country").aggregate(avg_invoice=invoices.Total.mean())
+```
+
+---
+
+## ☁️ 03 — API Data (`03-api.py`)
+
+### 💡 Concept
+
+Accessing **remote APIs** that serve **JSON** data over HTTP — a common pattern for weather, finance, or social media data.
+
+### 🧰 Key Libraries
+
+* **requests** – makes HTTP requests easily.
+* **pandas** – normalizes and structures JSON responses.
+
+### 🧠 Core Idea
+
+> APIs provide machine-readable data. You can treat them as live data sources for analytics pipelines.
+
+### 🏃 Example
+
+```python
+response = requests.get("https://api.open-meteo.com/v1/forecast", params={"latitude": 14.6, "longitude": 121.0})
+data = response.json()
+df = pd.json_normalize(data)
+```
+
+---
+
+## 🌐 04 — Web Scraping (HTML) (`04-webscrape-bs.py`)
+
+### 💡 Concept
+
+Extracting **structured information from web pages** using HTML parsing.
+
+### 🧰 Key Libraries
+
+* **requests** – fetches the HTML content.
+* **BeautifulSoup (bs4)** – parses and navigates the HTML DOM.
+* **pandas** – stores the extracted table data.
+
+### 🧠 Core Idea
+
+> When data isn’t available via API, you can extract it from a site’s HTML structure — carefully and ethically.
+
+### 🏃 Example
+
+```python
+soup = BeautifulSoup(requests.get(url).text, "html.parser")
+table = soup.find("table", {"class": "wikitable"})
+rows = [[td.get_text(strip=True) for td in tr.find_all("td")] for tr in table.find_all("tr")]
+df = pd.DataFrame(rows)
+```
+
+---
+
+## ⚙️ 05 — Web API Scraping (Hidden JSON) (`05-webscrape-api.py`)
+
+### 💡 Concept
+
+Some websites fetch data dynamically from hidden **JSON endpoints** — the same APIs the browser uses.
+
+### 🧰 Key Libraries
+
+* **requests** – calls the hidden API directly.
+* **pandas** – converts JSON into CSV-ready format.
+
+### 🧠 Core Idea
+
+> Instead of parsing HTML, you can often find the underlying API and access clean, structured JSON data.
+
+### 🏃 Example
+
+```python
+r = requests.get("https://quotes.toscrape.com/api/quotes?page=1")
+data = r.json()
+df = pd.DataFrame([{"text": q["text"], "author": q["author"]["name"]} for q in data["quotes"]])
+```
+
+---
+
+## 🤖 06 — Dynamic Web Scraping with Playwright (`05-webscrape-pw.py`)
+
+### 💡 Concept
+
+Handling **JavaScript-rendered sites** where HTML content loads dynamically after page load.
+
+### 🧰 Key Libraries
+
+* **Playwright** – automates browsers (Chromium, Firefox, WebKit).
+* **pandas** – structures the collected data.
+* **re** – cleans and extracts specific text patterns.
+
+### 🧠 Core Idea
+
+> When traditional scraping fails (because of JavaScript), use a **headless browser** to load and interact with the page like a human.
+
+### 🏃 Example
+
+```python
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
+    page = browser.new_page()
+    page.goto("https://www.lazada.com.ph/")
+    page.wait_for_selector(".card-jfy-item-desc")
+    # extract product info from visible cards...
+```
+
+---
+
+## 🎓 Key Takeaways
+
+| Technique        | Data Source     | Toolset                     | Concept                |
+| ---------------- | --------------- | --------------------------- | ---------------------- |
+| Flat Files       | Local files     | `pandas`, `yaml`            | DataFrames from files  |
+| Database         | SQL / SQLite    | `ibis`                      | Pythonic SQL           |
+| Public API       | REST JSON       | `requests`, `pandas`        | Remote data ingestion  |
+| Web HTML         | Web pages       | `requests`, `BeautifulSoup` | HTML scraping          |
+| Hidden API       | Dynamic sites   | `requests`                  | JSON endpoint scraping |
+| Browser Scraping | JS-driven pages | `Playwright`                | Headless automation    |
+
+---
+
+### 💬 Instructor Notes
+
+* Start with **pandas** for flat file reading — it’s the “hello world” of data ingestion.
+* Move to **Ibis** to understand data abstraction and query portability.
+* Explore **requests** + **BeautifulSoup** to grasp HTTP and HTML parsing.
+* Use **Playwright** for advanced, real-world scraping tasks.
+
+> Together, these form the core ingestion toolkit for any data engineer or data scientist.
