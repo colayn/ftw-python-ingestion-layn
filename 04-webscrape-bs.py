@@ -13,7 +13,7 @@ headers = {
         "Chrome/124.0.0.0 Safari/537.36"
     )
 }
-response = requests.get(url, headers=headers)
+response = requests.get(url), headers=headers)
 response.raise_for_status()
 
 # --- Step 2. Parse the HTML ---

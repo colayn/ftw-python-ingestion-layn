@@ -24,6 +24,7 @@ print(response.url)
 data = response.json()
 
 # --- Step 5. Normalize the nested JSON into a flat table ---
+print(data)
 df = pd.json_normalize(data)
 
 # --- Step 6. Inspect the results ---
