@@ -113,7 +113,9 @@ uv pip install -r requirements.txt
 If you plan to use **Playwright** (for `05-webscrape-pw.py`):
 
 ```bash
-python -m playwright install
+uv pip install playwright
+uv run playwright install chromium
+uv run playwright install deps
 ```
 
 ---
