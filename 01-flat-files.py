@@ -2,7 +2,7 @@ import pandas as pd
 import yaml
 
 # Set the directory path
-path = "/projects/ftw-python-ingestion/data/test"
+path = "/home/layn/ftw-python-ingestion-layn/data/test" # Change the directory 10-11-2025 layn
 
 # --- CSV ---
 print("\n=== CSV ===")

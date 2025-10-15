@@ -7,7 +7,7 @@ url = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)"
 
 # --- Step 1. Send request with a browser-like User-Agent ---
 headers = {
-    "User-Agent": (
+    "User-Agent": ( # Identifyer of browser
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/124.0.0.0 Safari/537.36"
